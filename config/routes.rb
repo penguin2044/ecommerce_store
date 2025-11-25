@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get "pages/about"
   get "pages/contact"
   devise_for :admin_users, ActiveAdmin::Devise.config

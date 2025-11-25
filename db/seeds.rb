@@ -136,15 +136,19 @@ puts "Created #{Product.count} products"
 
 puts "Creating admin user..."
 
-# Create admin user
+puts "Creating admin user..."
+
+# Create admin user with strong password
 admin = User.create!(
   email: 'admin@intothemusic.com',
+  password: 'Password123!',
+  password_confirmation: 'Password123!',
   first_name: 'Admin',
   last_name: 'User',
   admin: true
 )
 
-puts "Created admin user: #{admin.email}"
+puts "Created admin user: #{admin.email} (Password: Password123!)"
 
 puts "Creating sample customer..."
 
@@ -153,6 +157,8 @@ mb_province = Province.find_by(abbreviation: 'MB')
 
 customer = User.create!(
   email: 'customer@example.com',
+  password: 'Password123!',
+  password_confirmation: 'Password123!',
   first_name: 'John',
   last_name: 'Doe',
   admin: false
@@ -197,4 +203,10 @@ puts "\nAdmin login: admin@intothemusic.com"
 puts "Customer login: customer@example.com"
 puts "=" * 50
 
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+A# Create AdminUser for Active Admin login
+AdminUser.find_or_create_by!(email: 'admin@intothemusic.com') do |admin_user|
+  admin_user.password = 'Password123!'
+  admin_user.password_confirmation = 'Password123!'
+end
+
+puts "Created AdminUser for Active Admin: admin@intothemusic.com (Password: Password123!)"

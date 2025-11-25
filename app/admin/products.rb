@@ -8,7 +8,7 @@ ActiveAdmin.register Product do
   remove_filter :images_attachments
   remove_filter :images_blobs
   
-  # Customize the index page to show stock quantity prominently
+  # Customize the index page to show stock quantity
   index do
     selectable_column
     id_column
@@ -17,15 +17,7 @@ ActiveAdmin.register Product do
     column :price do |product|
       number_to_currency(product.price)
     end
-    column :stock_quantity do |product|
-      if product.stock_quantity == 0
-        status_tag("OUT OF STOCK", class: "error")
-      elsif product.stock_quantity < 5
-        status_tag("#{product.stock_quantity} - LOW STOCK", class: "warning")
-      else
-        status_tag("#{product.stock_quantity} in stock", class: "ok")
-      end
-    end
+    column :stock_quantity
     column :on_sale
     column :featured
     actions
@@ -51,33 +43,5 @@ ActiveAdmin.register Product do
     end
     
     f.actions
-  end
-  
-  # Show page with clear stock information
-  show do
-    attributes_table do
-      row :name
-      row :description
-      row :category
-      row :price do |product|
-        number_to_currency(product.price)
-      end
-      row :stock_quantity do |product|
-        if product.stock_quantity == 0
-          status_tag("OUT OF STOCK", class: "error")
-        elsif product.stock_quantity < 5
-          status_tag("#{product.stock_quantity} - LOW STOCK", class: "warning")
-        else
-          status_tag("#{product.stock_quantity} in stock", class: "ok")
-        end
-      end
-      row :on_sale
-      row :sale_price do |product|
-        number_to_currency(product.sale_price) if product.on_sale?
-      end
-      row :featured
-      row :created_at
-      row :updated_at
-    end
   end
 end

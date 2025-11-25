@@ -846,3 +846,55 @@ h1 {
   font-weight: bold;
   margin-left: 10px;
 }
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.pagination {
+  display: flex;
+  gap: 5px;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination a,
+.pagination .current,
+.pagination .gap {
+  padding: 10px 15px;
+  background: #3a3737;
+  color: #d7e3e4;
+  text-decoration: none;
+  border: 1px solid #474545;
+  border-radius: 5px;
+  transition: all 0.2s;
+}
+
+.pagination a:hover {
+  background: #474545;
+  color: #3498db;
+  border-color: #3498db;
+}
+
+.pagination .current {
+  margin-top: -11px;
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+  font-weight: bold;
+}
+
+.pagination .gap {
+  background: transparent;
+  border: none;
+  color: #95a5a6;
+}
+
+.pagination .first a,
+.pagination .prev a,
+.pagination .next a,
+.pagination .last a {
+  font-weight: bold;
+}

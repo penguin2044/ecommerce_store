@@ -119,4 +119,10 @@
       </p>
     <% end %>
   </div>
+  <!-- Pagination -->
+  <% if @products.total_pages > 1 %>
+    <div class="pagination-container">
+      <%= paginate @products %>
+    </div>
+  <% end %>
 </div>

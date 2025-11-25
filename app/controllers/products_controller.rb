@@ -28,7 +28,8 @@ class ProductsController < ApplicationController
       @search_query = params[:search]
     end
     
-    @products = @products.order(created_at: :desc)
+    # Paginate results - 12 per page
+    @products = @products.order(created_at: :desc).page(params[:page]).per(12)
   end
 
   def show

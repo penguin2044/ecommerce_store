@@ -10,4 +10,7 @@ class Page < ApplicationRecord
   def generate_slug
     self.slug ||= title.parameterize if title.present?
   end
+   def self.ransackable_attributes(auth_object = nil)
+    ["title", "content", "slug", "created_at", "updated_at", "id"]
+  end
 end

@@ -1,5 +1,25 @@
 <div class="container">
   <h1>Into the Music - Musical Instruments & Accessories</h1>
+  <!-- Search Bar -->
+   <div class="search-container">
+    <%= form_with url: root_path, method: :get, class: "search-form" do %>
+      <%= text_field_tag :search, params[:search],
+          placeholder: "Search for instruments, brands, or keywords...",
+          class: "search-input" %>
+      <%= submit_tag "Search", class: "search-btn" %>
+
+      <% if params[:search].present? %>
+        <%= link_to "Clear Search", root_path, class: "clear-search-btn" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Search Results Info -->
+  <% if @search_query.present? %>
+    <div class="search-results-info">
+      <p>Found <%= pluralize(@products.count, 'product') %> matching "<strong><%= @search_query %></strong>"</p>
+    </div>
+  <% end %>
 
   <!-- Category Navigation -->
   <div class="category-nav">

@@ -1,14 +1,30 @@
 class ProductsController < ApplicationController
   def index
+    @categories = Category.all.order(:name)
+
+    # Start with all products
+    @products = Product.includes(:category)
+
+    # Filter by category if selected
     if params[:category_id].present?
       @category = Category.find(params[:category_id])
-      @products = @category.products.includes(:category).order(created_at: :desc)
+      @products = @products.where(category_id: @category.id)
     else
-      @products = Product.includes(:category).order(created_at: :desc)
       @category = nil
     end
 
-    @categories = Category.all.order(:name)
+    # Filter by search query if present
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @products = @products.where(
+        "name ILIKE ? OR description ILIKE ?",
+        search_term,
+        search_term
+      )
+      @search_query = params[:search]
+    end
+
+    @products = @products.order(created_at: :desc)
   end
 
   def show

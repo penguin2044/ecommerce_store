@@ -1,0 +1,68 @@
+<div class="container">
+  <h1>Shopping Cart</h1>
+
+  <% if @cart_items.empty? %>
+    <div class="empty-cart">
+      <p>Your cart is empty</p>
+      <%= link_to 'Continue Shopping', root_path, class: 'btn' %>
+    </div>
+  <% else %>
+    <div class="cart-container">
+      <div class="cart-items">
+        <% @cart_items.each do |item| %>
+          <div class="cart-item">
+            <div class="cart-item-info">
+              <h3><%= link_to item[:product].name, product_path(item[:product]) %></h3>
+              <p class="category"><%= item[:product].category.name %></p>
+              <p class="item-price">
+                $<%= number_with_precision(item[:product].on_sale? ? item[:product].sale_price : item[:product].price, precision: 2) %> each
+              </p>
+            </div>
+
+            <div class="cart-item-quantity">
+              <%= form_with url: update_cart_quantity_path(item[:product]), method: :patch, class: 'quantity-form' do %>
+                <%= number_field_tag :quantity, item[:quantity],
+                    min: 1,
+                    max: item[:product].stock_quantity,
+                    class: 'quantity-input' %>
+                <%= submit_tag 'Update', class: 'btn-small' %>
+              <% end %>
+            </div>
+
+            <div class="cart-item-subtotal">
+              <p class="subtotal">$<%= number_with_precision(item[:subtotal], precision: 2) %></p>
+            </div>
+
+            <div class="cart-item-remove">
+              <%= button_to 'Remove', remove_from_cart_path(item[:product]),
+                  method: :delete,
+                  class: 'btn-remove',
+                  data: { confirm: 'Remove this item from cart?' } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="cart-summary">
+        <h2>Order Summary</h2>
+        <div class="summary-line">
+          <span>Subtotal:</span>
+          <span class="summary-amount">$<%= number_with_precision(@total, precision: 2) %></span>
+        </div>
+        <div class="summary-line total-line">
+          <span>Total:</span>
+          <span class="summary-amount">$<%= number_with_precision(@total, precision: 2) %></span>
+        </div>
+
+        <div class="cart-actions">
+          <%= link_to 'Proceed to Checkout', '#', class: 'btn btn-checkout' %>
+          <%= link_to 'Continue Shopping', root_path, class: 'btn btn-secondary' %>
+          <%= button_to 'Clear Cart', clear_cart_path,
+              method: :delete,
+              class: 'btn btn-clear',
+              data: { confirm: 'Are you sure you want to clear your cart?' } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

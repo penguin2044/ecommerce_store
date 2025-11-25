@@ -1,15 +1,19 @@
 Rails.application.routes.draw do
-  get "products/index"
-  get "products/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
- root 'products#index'
+  # Set root to products index (homepage)
+  root 'products#index'
 
   # Products routes
   resources :products, only: [:index, :show]
+
+  # Cart routes
+  get 'cart', to: 'cart#show', as: 'cart'
+  post 'cart/add/:id', to: 'cart#add', as: 'add_to_cart'
+  delete 'cart/remove/:id', to: 'cart#remove', as: 'remove_from_cart'
+  patch 'cart/update_quantity/:id', to: 'cart#update_quantity', as: 'update_cart_quantity'
+  delete 'cart/clear', to: 'cart#clear', as: 'clear_cart'
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

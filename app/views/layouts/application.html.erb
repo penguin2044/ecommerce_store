@@ -10,6 +10,25 @@
   </head>
 
   <body>
+    <nav class="main-nav">
+      <div class="container nav-container">
+        <%= link_to 'Into the Music', root_path, class: 'logo' %>
+        <%= link_to "🛒 Cart (#{session[:cart]&.values&.sum || 0})", cart_path, class: 'cart-link' %>
+      </div>
+    </nav>
+
+    <% if flash[:notice] %>
+      <div class="container">
+        <div class="flash notice"><%= flash[:notice] %></div>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="container">
+        <div class="flash alert"><%= flash[:alert] %></div>
+      </div>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

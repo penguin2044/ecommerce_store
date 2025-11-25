@@ -1,5 +1,5 @@
 class Address < ApplicationRecord
- elongs_to :user
+ belongs_to :user
   belongs_to :province
 
   validates :street_address, presence: true

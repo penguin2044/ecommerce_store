@@ -1,13 +1,14 @@
 <div class="container">
   <h1>Into the Music - Musical Instruments & Accessories</h1>
+  
   <!-- Search Bar -->
-   <div class="search-container">
+  <div class="search-container">
     <%= form_with url: root_path, method: :get, class: "search-form" do %>
-      <%= text_field_tag :search, params[:search],
-          placeholder: "Search for instruments, brands, or keywords...",
+      <%= text_field_tag :search, params[:search], 
+          placeholder: "Search for instruments, brands, or keywords...", 
           class: "search-input" %>
       <%= submit_tag "Search", class: "search-btn" %>
-
+      
       <% if params[:search].present? %>
         <%= link_to "Clear Search", root_path, class: "clear-search-btn" %>
       <% end %>
@@ -21,6 +22,55 @@
     </div>
   <% end %>
 
+  <!-- Featured Products Section (only show on main page, not when searching/filtering) -->
+  <% if @featured_products.any? && @category.nil? && @search_query.nil? %>
+    <div class="featured-section">
+      <h2 class="section-title">⭐ Featured Products</h2>
+      <div class="featured-grid">
+        <% @featured_products.each do |product| %>
+          <div class="product-card featured-card">
+            <span class="featured-badge">Featured</span>
+            <h3><%= link_to product.name, product_path(product) %></h3>
+            <p class="category"><%= product.category.name %></p>
+            <p class="description"><%= truncate(product.description, length: 80) %></p>
+            <p class="price">
+              <% if product.on_sale? %>
+                <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
+                <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
+              <% else %>
+                $<%= number_with_precision(product.price, precision: 2) %>
+              <% end %>
+            </p>
+            <%= link_to 'View Details', product_path(product), class: 'btn' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- On Sale Section (only show on main page, not when searching/filtering) -->
+  <% if @on_sale_products.any? && @category.nil? && @search_query.nil? %>
+    <div class="sale-section">
+      <h2 class="section-title">🔥 Hot Deals - On Sale Now!</h2>
+      <div class="sale-grid">
+        <% @on_sale_products.each do |product| %>
+          <div class="product-card sale-card">
+            <span class="sale-badge">Sale</span>
+            <h3><%= link_to product.name, product_path(product) %></h3>
+            <p class="category"><%= product.category.name %></p>
+            <p class="description"><%= truncate(product.description, length: 80) %></p>
+            <p class="price">
+              <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
+              <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
+              <span class="savings-badge">Save <%= number_to_percentage(((product.price - product.sale_price) / product.price * 100), precision: 0) %></span>
+            </p>
+            <%= link_to 'View Details', product_path(product), class: 'btn' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  
   <!-- Category Navigation -->
   <div class="category-nav">
     <%= link_to 'All Products', root_path, class: @category.nil? ? 'category-link active' : 'category-link' %>
@@ -33,6 +83,11 @@
   <% if @category %>
     <h2 class="category-title"><%= @category.name %></h2>
     <p class="category-description"><%= @category.description %></p>
+  <% end %>
+
+  <!-- All Products Title -->
+  <% if @category.nil? && @search_query.nil? %>
+    <h2 class="section-title">All Products</h2>
   <% end %>
 
   <!-- Products Grid -->
@@ -55,7 +110,13 @@
         </div>
       <% end %>
     <% else %>
-      <p class="no-products">No products found in this category.</p>
+      <p class="no-products">
+        <% if @search_query.present? %>
+          No products found matching "<%= @search_query %>". Try a different search term.
+        <% else %>
+          No products found in this category.
+        <% end %>
+      </p>
     <% end %>
   </div>
 </div>

@@ -783,3 +783,66 @@ h1 {
 .cart-link:hover {
   background-color: #2980b9;
 }
+/* Featured and Sale Sections */
+.featured-section, .sale-section {
+  margin: 40px 0;
+  padding: 30px;
+  background: #2d2b2b;
+  border-radius: 8px;
+  border: 2px solid #474545;
+}
+
+.section-title {
+  color: #f7f4f4;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+.featured-grid, .sale-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.featured-card {
+  border: 2px solid #f39c12;
+  position: relative;
+}
+
+.sale-card {
+  border: 2px solid #e74c3c;
+  position: relative;
+}
+
+.featured-badge, .sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 12px;
+  z-index: 10;
+}
+
+.featured-badge {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
+
+.sale-badge {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.savings-badge {
+  display: inline-block;
+  background: #27ae60;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 10px;
+}

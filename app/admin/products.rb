@@ -19,11 +19,11 @@ ActiveAdmin.register Product do
     end
     column :stock_quantity do |product|
       if product.stock_quantity == 0
-        status_tag("OUT OF STOCK", :error)
+        status_tag("OUT OF STOCK", class: "error")
       elsif product.stock_quantity < 5
-        status_tag("#{product.stock_quantity} - LOW STOCK", :warning)
+        status_tag("#{product.stock_quantity} - LOW STOCK", class: "warning")
       else
-        status_tag("#{product.stock_quantity} in stock", :ok)
+        status_tag("#{product.stock_quantity} in stock", class: "ok")
       end
     end
     column :on_sale
@@ -64,11 +64,11 @@ ActiveAdmin.register Product do
       end
       row :stock_quantity do |product|
         if product.stock_quantity == 0
-          status_tag("OUT OF STOCK", :error)
+          status_tag("OUT OF STOCK", class: "error")
         elsif product.stock_quantity < 5
-          status_tag("#{product.stock_quantity} - LOW STOCK", :warning)
+          status_tag("#{product.stock_quantity} - LOW STOCK", class: "warning")
         else
-          status_tag("#{product.stock_quantity} in stock", :ok)
+          status_tag("#{product.stock_quantity} in stock", class: "ok")
         end
       end
       row :on_sale

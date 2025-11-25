@@ -195,4 +195,6 @@ puts "Users: #{User.count}"
 puts "Pages: #{Page.count}"
 puts "\nAdmin login: admin@intothemusic.com"
 puts "Customer login: customer@example.com"
-puts "=" * 50AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+puts "=" * 50
+
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?

@@ -12,8 +12,12 @@
   <body>
     <nav class="main-nav">
       <div class="container nav-container">
-        <%= link_to 'Into the Music', root_path, class: 'logo' %>
-        <%= link_to "🛒 Cart (#{session[:cart]&.values&.sum || 0})", cart_path, class: 'cart-link' %>
+        <div class="nav-left">
+          <%= link_to 'Into the Music', root_path, class: 'logo' %>
+          <%= link_to 'About', about_path, class: 'nav-link' %>
+          <%= link_to 'Contact', contact_path, class: 'nav-link' %>
+        </div>
+        <%= link_to "Cart (#{session[:cart]&.values&.sum || 0})", cart_path, class: 'cart-link' %>
       </div>
     </nav>
 

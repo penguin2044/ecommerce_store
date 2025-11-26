@@ -1484,3 +1484,8 @@ h1 {
 select.form-input {
   cursor: pointer;
 }
+.page-text {
+  color: #b1b1b1;
+  line-height: 1.8;
+  font-size: 16px;
+}

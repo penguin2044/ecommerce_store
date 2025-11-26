@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "orders/index"
+  get "orders/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   
@@ -26,6 +28,9 @@ Rails.application.routes.draw do
   # Pages routes
   get 'about', to: 'pages#about'
   get 'contact', to: 'pages#contact'
+
+  # Orders routes
+  resources :orders, only: [:index, :show]
   
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

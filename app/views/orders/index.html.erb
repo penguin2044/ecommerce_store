@@ -1,0 +1,42 @@
+<div class="container">
+  <h1>Order History</h1>
+  
+  <% if @orders.any? %>
+    <div class="orders-list">
+      <% @orders.each do |order| %>
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-info">
+              <h3>Order #<%= order.id %></h3>
+              <p class="order-date"><%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+            </div>
+            <div class="order-status">
+              <span class="status-badge <%= order.status %>"><%= order.status.titleize %></span>
+            </div>
+          </div>
+          
+          <div class="order-summary">
+            <p><strong>Items:</strong> <%= order.order_items.sum(:quantity) %></p>
+            <p><strong>Total:</strong> $<%= number_with_precision(order.total, precision: 2) %></p>
+          </div>
+          
+          <div class="order-actions">
+            <%= link_to 'View Details', order_path(order), class: 'btn btn-small' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Pagination -->
+    <% if @orders.total_pages > 1 %>
+      <div class="pagination-container">
+        <%= paginate @orders %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="empty-state">
+      <p>You haven't placed any orders yet.</p>
+      <%= link_to 'Start Shopping', root_path, class: 'btn' %>
+    </div>
+  <% end %>
+</div>

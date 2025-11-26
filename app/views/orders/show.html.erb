@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="order-detail">
+    <div class="order-detail-header">
+      <%= link_to '← Back to Orders', orders_path, class: 'back-link' %>
+      <h1>Order #<%= @order.id %></h1>
+      <p class="order-date"><%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+      <span class="status-badge <%= @order.status %>"><%= @order.status.titleize %></span>
+    </div>
+    
+    <div class="order-items-section">
+      <h2>Order Items</h2>
+      <div class="order-items-list">
+        <% @order.order_items.each do |item| %>
+          <div class="order-item-row">
+            <div class="item-details">
+              <h3><%= link_to item.product.name, product_path(item.product) %></h3>
+              <p class="item-meta">Quantity: <%= item.quantity %> × $<%= number_with_precision(item.price_at_purchase, precision: 2) %></p>
+            </div>
+            <div class="item-total">
+              $<%= number_with_precision(item.quantity * item.price_at_purchase, precision: 2) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="order-totals">
+      <div class="total-row">
+        <span>Subtotal:</span>
+        <span>$<%= number_with_precision(@order.subtotal, precision: 2) %></span>
+      </div>
+      <% if @order.gst && @order.gst > 0 %>
+        <div class="total-row">
+          <span>GST:</span>
+          <span>$<%= number_with_precision(@order.gst, precision: 2) %></span>
+        </div>
+      <% end %>
+      <% if @order.pst && @order.pst > 0 %>
+        <div class="total-row">
+          <span>PST:</span>
+          <span>$<%= number_with_precision(@order.pst, precision: 2) %></span>
+        </div>
+      <% end %>
+      <% if @order.hst && @order.hst > 0 %>
+        <div class="total-row">
+          <span>HST:</span>
+          <span>$<%= number_with_precision(@order.hst, precision: 2) %></span>
+        </div>
+      <% end %>
+      <div class="total-row grand-total">
+        <span>Total:</span>
+        <span>$<%= number_with_precision(@order.total, precision: 2) %></span>
+      </div>
+    </div>
+  </div>
+</div>

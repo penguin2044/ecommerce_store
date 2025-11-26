@@ -67,7 +67,7 @@
   <!-- On Sale Section -->
   <% if @on_sale_products.any? && @category.nil? && @search_query.nil? && params[:search_category_id].nil? %>
     <div class="sale-section">
-      <h2 class="section-title">🔥 Hot Deals - On Sale Now!</h2>
+      <h2 class="section-title">Hot Deals - On Sale Now!</h2>
       <div class="sale-grid">
         <% @on_sale_products.each do |product| %>
           <div class="product-card sale-card">

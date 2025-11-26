@@ -28,12 +28,28 @@ class CheckoutController < ApplicationController
     # Get or create user's address
     @address = current_user.address || current_user.build_address
     @provinces = Province.all.order(:name)
+    
+    # Calculate taxes if address exists
+    if @address.province
+      calculate_taxes(@subtotal, @address.province)
+    end
   end
   
   def create
     if @cart.empty?
       redirect_to cart_path, alert: "Your cart is empty"
       return
+    end
+    
+    # Save or update address if provided
+    if params[:street_address].present?
+      address = current_user.address || current_user.build_address
+      address.update!(
+        street_address: params[:street_address],
+        city: params[:city],
+        postal_code: params[:postal_code],
+        province_id: params[:province_id]
+      )
     end
     
     # Calculate totals
@@ -53,7 +69,7 @@ class CheckoutController < ApplicationController
           product_data: {
             name: product.name,
           },
-          unit_amount: (item_price * 100).to_i, # Stripe uses cents
+          unit_amount: (item_price * 100).to_i,
         },
         quantity: quantity,
       }
@@ -64,7 +80,8 @@ class CheckoutController < ApplicationController
       payment_method_types: ['card'],
       line_items: line_items,
       mode: 'payment',
-      success_url: url_for(controller: 'checkout', action: 'success', only_path: false) + '?session_id={CHECKOUT_SESSION_ID}',      cancel_url: cart_url,
+      success_url: url_for(controller: 'checkout', action: 'success', only_path: false) + '?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: cart_url,
       customer_email: current_user.email,
     })
     
@@ -82,11 +99,27 @@ class CheckoutController < ApplicationController
         # Retrieve the checkout session from Stripe
         stripe_session = Stripe::Checkout::Session.retrieve(session_id)
         
-        # Create order
+        # Calculate subtotal from cart
+        subtotal = 0
+        @cart.each do |product_id, quantity|
+          product = Product.find_by(id: product_id)
+          next unless product
+          item_price = product.on_sale? ? product.sale_price : product.price
+          subtotal += item_price * quantity
+        end
+        
+        # Get user's province for tax calculation
+        province = current_user.address&.province
+        taxes = calculate_taxes(subtotal, province)
+        
+        # Create order with tax breakdown
         order = current_user.orders.create!(
           status: 'paid',
-          subtotal: stripe_session.amount_total / 100.0, # Convert from cents
-          total: stripe_session.amount_total / 100.0,
+          subtotal: subtotal,
+          gst: taxes[:gst],
+          pst: taxes[:pst],
+          hst: taxes[:hst],
+          total: taxes[:total],
           stripe_payment_intent_id: stripe_session.payment_intent
         )
         
@@ -124,5 +157,21 @@ class CheckoutController < ApplicationController
   
   def initialize_cart
     @cart = session[:cart] ||= {}
+  end
+  
+  def calculate_taxes(subtotal, province)
+    return { gst: 0, pst: 0, hst: 0, total: subtotal } unless province
+    
+    gst = (subtotal * province.gst_rate).round(2)
+    pst = (subtotal * province.pst_rate).round(2)
+    hst = (subtotal * province.hst_rate).round(2)
+    total = (subtotal + gst + pst + hst).round(2)
+    
+    @gst = gst
+    @pst = pst
+    @hst = hst
+    @total = total
+    
+    { gst: gst, pst: pst, hst: hst, total: total }
   end
 end

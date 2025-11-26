@@ -1292,7 +1292,6 @@ h1 {
 .order-date {
   color: #95a5a6;
   font-size: 14px;
-  margin: 0;
 }
 
 .status-badge {
@@ -1304,6 +1303,7 @@ h1 {
 }
 
 .status-badge.paid {
+	
   background: #27ae60;
   color: white;
 }
@@ -1456,4 +1456,31 @@ h1 {
 
 .total-row.grand-total span:last-child {
   color: #27ae60;
+}
+.logout-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+.tax-line {
+  color: #95a5a6;
+  font-size: 14px;
+  padding: 6px 0;
+}
+.address-prompt {
+  color: #d7e3e4;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.form-input[readonly] {
+  background: #1a1919;
+  color: #95a5a6;
+  cursor: not-allowed;
+}
+
+select.form-input {
+  cursor: pointer;
 }

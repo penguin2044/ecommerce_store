@@ -26,9 +26,33 @@
           <span>Subtotal:</span>
           <span>$<%= number_with_precision(@subtotal, precision: 2) %></span>
         </div>
+        
+        <% if @address.province %>
+          <% if @gst && @gst > 0 %>
+            <div class="total-line tax-line">
+              <span>GST (<%= number_to_percentage(@address.province.gst_rate * 100, precision: 2) %>):</span>
+              <span>$<%= number_with_precision(@gst, precision: 2) %></span>
+            </div>
+          <% end %>
+          
+          <% if @pst && @pst > 0 %>
+            <div class="total-line tax-line">
+              <span>PST (<%= number_to_percentage(@address.province.pst_rate * 100, precision: 2) %>):</span>
+              <span>$<%= number_with_precision(@pst, precision: 2) %></span>
+            </div>
+          <% end %>
+          
+          <% if @hst && @hst > 0 %>
+            <div class="total-line tax-line">
+              <span>HST (<%= number_to_percentage(@address.province.hst_rate * 100, precision: 2) %>):</span>
+              <span>$<%= number_with_precision(@hst, precision: 2) %></span>
+            </div>
+          <% end %>
+        <% end %>
+        
         <div class="total-line grand-total">
           <span>Total:</span>
-          <span>$<%= number_with_precision(@subtotal, precision: 2) %></span>
+          <span>$<%= number_with_precision(@total || @subtotal, precision: 2) %></span>
         </div>
       </div>
     </div>
@@ -37,31 +61,59 @@
     <div class="checkout-form">
       <h2>Shipping Information</h2>
       
-        <%= form_with model: @address, url: '/checkout/create', method: :post do |f| %>        <div class="form-group">
-          <%= f.label :street_address %>
-          <%= f.text_field :street_address, value: @address.street_address, class: 'form-input' %>
-        </div>
-        
-        <div class="form-row">
+      <%= form_with model: @address, url: '/checkout/create', method: :post do |f| %>
+        <% if @address.persisted? %>
           <div class="form-group">
-            <%= f.label :city %>
-            <%= f.text_field :city, value: @address.city, class: 'form-input' %>
+            <%= f.label :street_address %>
+            <%= f.text_field :street_address, value: @address.street_address, readonly: true, class: 'form-input' %>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <%= f.label :city %>
+              <%= f.text_field :city, value: @address.city, readonly: true, class: 'form-input' %>
+            </div>
+            
+            <div class="form-group">
+              <%= f.label :province %>
+              <%= f.text_field :province, value: @address.province&.name, readonly: true, class: 'form-input' %>
+            </div>
           </div>
           
           <div class="form-group">
-            <%= f.label :province %>
-            <%= f.text_field :province, value: @address.province&.name, class: 'form-input' %>
+            <%= f.label :postal_code %>
+            <%= f.text_field :postal_code, value: @address.postal_code, readonly: true, class: 'form-input' %>
           </div>
-        </div>
-        
-        <div class="form-group">
-          <%= f.label :postal_code %>
-          <%= f.text_field :postal_code, value: @address.postal_code, class: 'form-input' %>
-        </div>
-        
-        <p class="shipping-note">
-          Note: Address information is from your profile. Contact us if you need to ship to a different address.
-        </p>
+          
+          <p class="shipping-note">
+            Note: To change your address, please contact us.
+          </p>
+        <% else %>
+          <p class="address-prompt">Please enter your shipping address:</p>
+          
+          <div class="form-group">
+            <%= label_tag :street_address %>
+            <%= text_field_tag :street_address, '', required: true, class: 'form-input', placeholder: '123 Main Street' %>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <%= label_tag :city %>
+              <%= text_field_tag :city, '', required: true, class: 'form-input', placeholder: 'Winnipeg' %>
+            </div>
+            
+            <div class="form-group">
+              <%= label_tag :postal_code %>
+              <%= text_field_tag :postal_code, '', required: true, class: 'form-input', placeholder: 'R3C 1A1' %>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <%= label_tag :province_id, "Province" %>
+            <%= select_tag :province_id, options_from_collection_for_select(@provinces, :id, :name), 
+                { prompt: 'Select Province', required: true, class: 'form-input' } %>
+          </div>
+        <% end %>
         
         <%= f.submit "Proceed to Payment", class: 'btn btn-checkout' %>
       <% end %>

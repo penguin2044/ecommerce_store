@@ -7,6 +7,17 @@
       <span class="status-badge <%= @order.status %>"><%= @order.status.titleize %></span>
     </div>
     
+    <!-- Shipping Address Section -->
+    <% if @order.street_address.present? %>
+      <div class="order-address-section">
+        <h2>Shipping Address</h2>
+        <div class="address-box">
+          <p><%= @order.street_address %></p>
+          <p><%= @order.city %>, <%= @order.province&.abbreviation || @order.province&.name %> <%= @order.postal_code %></p>
+        </div>
+      </div>
+    <% end %>
+    
     <div class="order-items-section">
       <h2>Order Items</h2>
       <div class="order-items-list">

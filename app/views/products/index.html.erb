@@ -1,35 +1,51 @@
 <div class="container">
   <h1>Into the Music - Musical Instruments & Accessories</h1>
   
-  <!-- Search Bar -->
+  <!-- Search Bar with Category Filter -->
   <div class="search-container">
     <%= form_with url: root_path, method: :get, class: "search-form" do %>
-      <%= text_field_tag :search, params[:search], 
-          placeholder: "Search for instruments, brands, or keywords...", 
-          class: "search-input" %>
-      <%= submit_tag "Search", class: "search-btn" %>
+      <div class="search-row">
+        <%= text_field_tag :search, params[:search], 
+            placeholder: "Search for instruments, brands, or keywords...", 
+            class: "search-input" %>
+        
+        <%= select_tag :search_category_id, 
+            options_from_collection_for_select(@categories, :id, :name, params[:search_category_id]), 
+            { prompt: 'All Categories', class: 'search-category-select' } %>
+        
+        <%= submit_tag "Search", class: "search-btn" %>
+      </div>
       
-      <% if params[:search].present? %>
+      <% if params[:search].present? || params[:search_category_id].present? %>
         <%= link_to "Clear Search", root_path, class: "clear-search-btn" %>
       <% end %>
     <% end %>
   </div>
 
   <!-- Search Results Info -->
-  <% if @search_query.present? %>
+  <% if @search_query.present? || params[:search_category_id].present? %>
     <div class="search-results-info">
-      <p>Found <%= pluralize(@products.count, 'product') %> matching "<strong><%= @search_query %></strong>"</p>
+      <p>
+        Found <%= pluralize(@products.total_count, 'product') %>
+        <% if @search_query.present? %>
+          matching "<strong><%= @search_query %></strong>"
+        <% end %>
+        <% if params[:search_category_id].present? %>
+          <% search_cat = Category.find_by(id: params[:search_category_id]) %>
+          in <strong><%= search_cat&.name || 'selected category' %></strong>
+        <% end %>
+      </p>
     </div>
   <% end %>
 
-  <!-- Featured Products Section (only show on main page, not when searching/filtering) -->
-  <% if @featured_products.any? && @category.nil? && @search_query.nil? %>
+  <!-- Recently Updated Products Section -->
+  <% if @recently_updated_products.any? && @category.nil? && @search_query.nil? && params[:search_category_id].nil? %>
     <div class="featured-section">
-      <h2 class="section-title">⭐ Featured Products</h2>
+      <h2 class="section-title">Recently Updated (Last 3 Days)</h2>
       <div class="featured-grid">
-        <% @featured_products.each do |product| %>
+        <% @recently_updated_products.each do |product| %>
           <div class="product-card featured-card">
-            <span class="featured-badge">Featured</span>
+            <span class="featured-badge">Updated</span>
             <h3><%= link_to product.name, product_path(product) %></h3>
             <p class="category"><%= product.category.name %></p>
             <p class="description"><%= truncate(product.description, length: 80) %></p>
@@ -48,8 +64,8 @@
     </div>
   <% end %>
 
-  <!-- On Sale Section (only show on main page, not when searching/filtering) -->
-  <% if @on_sale_products.any? && @category.nil? && @search_query.nil? %>
+  <!-- On Sale Section -->
+  <% if @on_sale_products.any? && @category.nil? && @search_query.nil? && params[:search_category_id].nil? %>
     <div class="sale-section">
       <h2 class="section-title">🔥 Hot Deals - On Sale Now!</h2>
       <div class="sale-grid">
@@ -86,7 +102,7 @@
   <% end %>
 
   <!-- All Products Title -->
-  <% if @category.nil? && @search_query.nil? %>
+  <% if @category.nil? && @search_query.nil? && params[:search_category_id].nil? %>
     <h2 class="section-title">All Products</h2>
   <% end %>
 
@@ -119,6 +135,7 @@
       </p>
     <% end %>
   </div>
+  
   <!-- Pagination -->
   <% if @products.total_pages > 1 %>
     <div class="pagination-container">

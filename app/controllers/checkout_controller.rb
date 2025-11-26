@@ -108,11 +108,12 @@ class CheckoutController < ApplicationController
           subtotal += item_price * quantity
         end
         
-        # Get user's province for tax calculation
-        province = current_user.address&.province
+        # Get user's address for tax calculation and saving to order
+        address = current_user.address
+        province = address&.province
         taxes = calculate_taxes(subtotal, province)
         
-        # Create order with tax breakdown
+        # Create order with tax breakdown AND address details
         order = current_user.orders.create!(
           status: 'paid',
           subtotal: subtotal,
@@ -120,7 +121,11 @@ class CheckoutController < ApplicationController
           pst: taxes[:pst],
           hst: taxes[:hst],
           total: taxes[:total],
-          stripe_payment_intent_id: stripe_session.payment_intent
+          stripe_payment_intent_id: stripe_session.payment_intent,
+          street_address: address&.street_address,
+          city: address&.city,
+          postal_code: address&.postal_code,
+          province_id: address&.province_id
         )
         
         # Create order items

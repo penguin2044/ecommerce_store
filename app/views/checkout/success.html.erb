@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="success-container">
+    <div class="success-icon">✓</div>
+    <h1>Order Complete!</h1>
+    <p class="success-message">Thank you for your purchase! Your order has been confirmed.</p>
+    
+    <% if @order %>
+      <div class="order-details">
+        <h3>Order #<%= @order.id %></h3>
+        <p>Total: $<%= number_with_precision(@order.total, precision: 2) %></p>
+        <p>Status: <%= @order.status.titleize %></p>
+      </div>
+    <% end %>
+    
+    <div class="success-actions">
+      <%= link_to 'Continue Shopping', root_path, class: 'btn' %>
+    </div>
+  </div>
+</div>

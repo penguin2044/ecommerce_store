@@ -55,7 +55,7 @@
         </div>
 
         <div class="cart-actions">
-          <%= link_to 'Proceed to Checkout', '#', class: 'btn btn-checkout' %>
+          <%= link_to 'Proceed to Checkout', checkout_path, class: 'btn btn-checkout' %>
           <%= link_to 'Continue Shopping', root_path, class: 'btn btn-secondary' %>
           <%= button_to 'Clear Cart', clear_cart_path,
               method: :delete,

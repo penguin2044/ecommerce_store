@@ -1,12 +1,16 @@
 <% if flash[:notice] %>
   <div class="container">
     <div class="flash notice" data-flash-hash="<%= session[:flash_hash] %>">
-      <%= flash[:notice].is_a?(Hash) ? flash[:notice][:message] : flash[:notice] %>
       <% if flash[:notice].is_a?(Hash) %>
+        <%= flash[:notice]["message"] %>
         <small style="display: block; margin-top: 5px; font-size: 12px; opacity: 0.8;">
-          Session: <%= flash[:notice][:hash]&.first(8) %>... | 
-          Time: <%= Time.at(flash[:notice][:timestamp]).strftime('%H:%M:%S') if flash[:notice][:timestamp] %>
+          Session: <%= session[:flash_hash]&.first(8) %>...
+          <% if flash[:notice]["timestamp"] %>
+            | Time: <%= Time.at(flash[:notice]["timestamp"]).strftime('%H:%M:%S') %>
+          <% end %>
         </small>
+      <% else %>
+        <%= flash[:notice] %>
       <% end %>
     </div>
   </div>
@@ -15,12 +19,16 @@
 <% if flash[:alert] %>
   <div class="container">
     <div class="flash alert" data-flash-hash="<%= session[:flash_hash] %>">
-      <%= flash[:alert].is_a?(Hash) ? flash[:alert][:message] : flash[:alert] %>
       <% if flash[:alert].is_a?(Hash) %>
+        <%= flash[:alert]["message"] %>
         <small style="display: block; margin-top: 5px; font-size: 12px; opacity: 0.8;">
-          Session: <%= flash[:alert][:hash]&.first(8) %>... | 
-          Time: <%= Time.at(flash[:alert][:timestamp]).strftime('%H:%M:%S') if flash[:alert][:timestamp] %>
+          Session: <%= session[:flash_hash]&.first(8) %>...
+          <% if flash[:alert]["timestamp"] %>
+            | Time: <%= Time.at(flash[:alert]["timestamp"]).strftime('%H:%M:%S') %>
+          <% end %>
         </small>
+      <% else %>
+        <%= flash[:alert] %>
       <% end %>
     </div>
   </div>

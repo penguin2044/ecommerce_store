@@ -28,9 +28,8 @@ class CartController < ApplicationController
         current_quantity = @cart[product.id.to_s]
         if current_quantity < product.stock_quantity
           @cart[product.id.to_s] += 1
-          flash[:notice] = "Added another #{product.name} to cart"
-        else
-          flash[:alert] = "Cannot add more - only #{product.stock_quantity} in stock"
+          set_secure_flash(:notice, "Added another #{product.name} to cart")        else
+          set_secure_flash(:alert, "Cannot add more - only #{product.stock_quantity} in stock")
         end
       else
         # Add new product to cart

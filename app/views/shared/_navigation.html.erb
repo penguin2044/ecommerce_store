@@ -1,0 +1,20 @@
+<nav class="main-nav">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <%= link_to 'Into the Music', root_path, class: 'logo' %>
+      <%= link_to 'About', about_path, class: 'nav-link' %>
+      <%= link_to 'Contact', contact_path, class: 'nav-link' %>
+    </div>
+    <div class="nav-right">
+      <% if user_signed_in? %>
+        <span class="nav-link">Hello, <%= current_user.first_name %>!</span>
+        <%= link_to 'Orders', orders_path, class: 'nav-link' %>
+        <%= button_to 'Logout', destroy_user_session_path, method: :delete, class: 'nav-link logout-btn' %>
+      <% else %>
+        <%= link_to 'Login', new_user_session_path, class: 'nav-link' %>
+        <%= link_to 'Sign Up', new_user_registration_path, class: 'nav-link' %>
+      <% end %>
+      <%= link_to "Cart (#{session[:cart]&.values&.sum || 0})", cart_path, class: 'cart-link' %>
+    </div>
+  </div>
+</nav>

@@ -28,17 +28,17 @@ class CartController < ApplicationController
         current_quantity = @cart[product.id.to_s]
         if current_quantity < product.stock_quantity
           @cart[product.id.to_s] += 1
-          flash[:notice] = "Added another #{product.name} to cart"
+          set_secure_flash(:notice, "Added another #{product.name} to cart")
         else
-          flash[:alert] = "Cannot add more - only #{product.stock_quantity} in stock"
+          set_secure_flash(:alert, "Cannot add more - only #{product.stock_quantity} in stock")
         end
       else
         # Add new product to cart
         @cart[product.id.to_s] = 1
-        flash[:notice] = "#{product.name} added to cart"
+        set_secure_flash(:notice, "#{product.name} added to cart")
       end
     else
-      flash[:alert] = "#{product.name} is out of stock"
+      set_secure_flash(:alert, "#{product.name} is out of stock")
     end
 
     session[:cart] = @cart
@@ -50,7 +50,7 @@ class CartController < ApplicationController
     @cart.delete(product.id.to_s)
     session[:cart] = @cart
 
-    flash[:notice] = "#{product.name} removed from cart"
+    set_secure_flash(:notice, "#{product.name} removed from cart")
     redirect_to cart_path
   end
 
@@ -61,11 +61,11 @@ class CartController < ApplicationController
     if quantity > 0 && quantity <= product.stock_quantity
       @cart[product.id.to_s] = quantity
       session[:cart] = @cart
-      flash[:notice] = "Quantity updated"
+      set_secure_flash(:notice, "Quantity updated")
     elsif quantity > product.stock_quantity
-      flash[:alert] = "Only #{product.stock_quantity} in stock"
+      set_secure_flash(:alert, "Only #{product.stock_quantity} in stock")
     else
-      flash[:alert] = "Invalid quantity"
+      set_secure_flash(:alert, "Invalid quantity")
     end
 
     redirect_to cart_path
@@ -73,7 +73,7 @@ class CartController < ApplicationController
 
   def clear
     session[:cart] = {}
-    flash[:notice] = "Cart cleared"
+    set_secure_flash(:notice, "Cart cleared")
     redirect_to cart_path
   end
 

@@ -1,11 +1,35 @@
 <% if flash[:notice] %>
   <div class="container">
-    <div class="flash notice"><%= flash[:notice] %></div>
+    <div class="flash notice" data-flash-hash="<%= session[:flash_hash] %>">
+      <% if flash[:notice].is_a?(Hash) %>
+        <%= flash[:notice]["message"] %>
+        <small style="display: block; margin-top: 5px; font-size: 12px; opacity: 0.8;">
+          Session: <%= session[:flash_hash]&.first(8) %>...
+          <% if flash[:notice]["timestamp"] %>
+            | Time: <%= Time.at(flash[:notice]["timestamp"]).strftime('%H:%M:%S') %>
+          <% end %>
+        </small>
+      <% else %>
+        <%= flash[:notice] %>
+      <% end %>
+    </div>
   </div>
 <% end %>
 
 <% if flash[:alert] %>
   <div class="container">
-    <div class="flash alert"><%= flash[:alert] %></div>
+    <div class="flash alert" data-flash-hash="<%= session[:flash_hash] %>">
+      <% if flash[:alert].is_a?(Hash) %>
+        <%= flash[:alert]["message"] %>
+        <small style="display: block; margin-top: 5px; font-size: 12px; opacity: 0.8;">
+          Session: <%= session[:flash_hash]&.first(8) %>...
+          <% if flash[:alert]["timestamp"] %>
+            | Time: <%= Time.at(flash[:alert]["timestamp"]).strftime('%H:%M:%S') %>
+          <% end %>
+        </small>
+      <% else %>
+        <%= flash[:alert] %>
+      <% end %>
+    </div>
   </div>
 <% end %>

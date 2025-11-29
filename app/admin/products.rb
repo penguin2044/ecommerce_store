@@ -1,6 +1,6 @@
 ActiveAdmin.register Product do
   permit_params :name, :description, :price, :category_id, :stock_quantity,
-                :on_sale, :sale_price, :featured
+                :on_sale, :sale_price, :featured, tag_ids: []
   
   # Remove problematic association filters
   remove_filter :order_items
@@ -40,6 +40,7 @@ ActiveAdmin.register Product do
     
     f.inputs "Featured" do
       f.input :featured, label: "Featured Product?"
+      f.input :tags, as: :check_boxes, collection: Tag.all.order(:name)
     end
     
     f.actions

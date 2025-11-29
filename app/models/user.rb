@@ -5,6 +5,9 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
   has_one :address, dependent: :destroy
   
+  # allows nested address attributes in forms
+  accepts_nested_attributes_for :address, allow_destroy: true
+  
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :first_name, presence: true, length: { minimum: 1, maximum: 50 }
   validates :last_name, presence: true, length: { minimum: 1, maximum: 50 }

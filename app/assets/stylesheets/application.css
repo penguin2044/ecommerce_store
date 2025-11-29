@@ -1521,3 +1521,51 @@ select.form-input {
   margin: 8px 0;
   font-size: 16px;
 }
+/* Breadcrumbs */
+.breadcrumbs {
+  background: #2d2b2b;
+  padding: 12px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #474545;
+}
+
+.breadcrumbs ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+  color: #d7e3e4;
+  font-size: 14px;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "›";
+  margin-left: 8px;
+  color: #95a5a6;
+  font-weight: bold;
+}
+
+.breadcrumbs a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+  color: #83c1eb;
+  text-decoration: underline;
+}
+
+.breadcrumbs .current {
+  color: #f7f4f4;
+  font-weight: bold;
+}

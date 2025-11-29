@@ -32,6 +32,35 @@
       <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
     </div>
 
+    <hr style="margin: 30px 0; border-color: #474545;">
+    
+    <h3 style="color: #6485a7; margin-bottom: 20px;">Shipping Address (Optional)</h3>
+
+    <%= f.fields_for :address_attributes do |address_fields| %>
+      <div class="field">
+        <%= address_fields.label :street_address %>
+        <%= address_fields.text_field :street_address %>
+      </div>
+
+      <div class="field">
+        <%= address_fields.label :city %>
+        <%= address_fields.text_field :city %>
+      </div>
+
+      <div class="field">
+        <%= address_fields.label :province_id, "Province" %>
+        <%= address_fields.select :province_id, 
+            options_from_collection_for_select(Province.all.order(:name), :id, :name), 
+            { prompt: "Select Province" },
+            { style: "width: 100%; padding: 12px; background: #2d2b2b; color: #f7f4f4; border: 2px solid #474545; border-radius: 5px;" } %>
+      </div>
+
+      <div class="field">
+        <%= address_fields.label :postal_code %>
+        <%= address_fields.text_field :postal_code, placeholder: "A1A 1A1" %>
+      </div>
+    <% end %>
+
     <div class="actions">
       <%= f.submit "Sign up" %>
     </div>

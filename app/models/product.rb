@@ -25,7 +25,7 @@ class Product < ApplicationRecord
   end
   
   def self.ransackable_associations(auth_object = nil)
-    ["category"]
+    ["category", "tags", "product_tags"]
   end
   
   private

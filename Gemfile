@@ -45,6 +45,7 @@ gem 'activeadmin'
 gem 'devise'
 gem 'kaminari'
 gem 'stripe'
+gem 'gretel'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

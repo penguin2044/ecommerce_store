@@ -42,7 +42,11 @@
         <div class="flash alert"><%= flash[:alert] %></div>
       </div>
     <% end %>
-    
-    <%= yield %>
+
+    <div class="container">
+      <%= breadcrumbs separator: " › ", class: "breadcrumbs" %>
+    </div>
+
+<%= yield %>
   </body>
 </html>

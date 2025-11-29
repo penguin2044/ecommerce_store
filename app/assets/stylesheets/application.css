@@ -845,3 +845,25 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+/* Product Images */
+.product-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #5a5555;
+  object-fit: cover;
+  max-height: 400px;
+}
+
+@media (max-width: 768px) {
+  .product-images {
+    grid-template-columns: 1fr;
+  }
+}

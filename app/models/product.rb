@@ -4,7 +4,7 @@ class Product < ApplicationRecord
   has_many :tags, through: :product_tags
   has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items
-  # has_many_attached :images
+  has_many_attached :images
   
   validates :name, presence: true, length: { minimum: 2, maximum: 200 }
   validates :description, presence: true, length: { minimum: 10, maximum: 5000 }

@@ -1,6 +1,6 @@
 ActiveAdmin.register Product do
   permit_params :name, :description, :price, :category_id, :stock_quantity,
-                :on_sale, :sale_price, :featured, tag_ids: []
+                :on_sale, :sale_price, :featured, tag_ids: [], images: []
   
   # Remove problematic association filters
   remove_filter :order_items
@@ -31,6 +31,7 @@ ActiveAdmin.register Product do
       f.input :category
       f.input :price, hint: "Enter price without dollar sign"
       f.input :stock_quantity, hint: "Number of items in stock"
+      f.input :images, as: :file, input_html: { multiple: true }
     end
     
     f.inputs "Sale Information" do

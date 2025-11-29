@@ -14,7 +14,13 @@
         </div>
       <% end %>
     </div>
-
+    <% if @product.images.attached? %>
+  <div class="product-images">
+    <% @product.images.each do |image| %>
+      <%= image_tag image, class: "product-image" %>
+    <% end %>
+  </div>
+<% end %>
     <div class="product-info">
       <div class="product-description">
         <h2>Description</h2>

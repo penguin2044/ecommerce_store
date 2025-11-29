@@ -5,6 +5,14 @@
       <%= link_to '← Back to Products', root_path, class: 'back-link' %>
       <h1><%= @product.name %></h1>
       <p class="category"><%= @product.category.name %></p>
+      
+      <% if @product.tags.any? %>
+        <div class="product-tags">
+          <% @product.tags.each do |tag| %>
+            <span class="tag-badge"><%= tag.name %></span>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
     <div class="product-info">

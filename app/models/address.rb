@@ -2,12 +2,13 @@ class Address < ApplicationRecord
   belongs_to :user
   belongs_to :province
   
-  validates :street_address, presence: true, length: { minimum: 5, maximum: 255 }
-  validates :city, presence: true, length: { minimum: 2, maximum: 100 }
+  # Only validate if address fields are being filled in
+  validates :street_address, presence: true, length: { minimum: 5, maximum: 255 }, if: :should_validate?
+  validates :city, presence: true, length: { minimum: 2, maximum: 100 }, if: :should_validate?
   validates :postal_code, presence: true, 
-            format: { with: /\A[A-Z]\d[A-Z]\s?\d[A-Z]\d\z/i, message: "must be a valid Canadian postal code (e.g., A1A 1A1)" }
-  validates :user_id, presence: true
-  validates :province_id, presence: true
+            format: { with: /\A[A-Z]\d[A-Z]\s?\d[A-Z]\d\z/i, message: "must be a valid Canadian postal code (e.g., A1A 1A1)" },
+            if: :should_validate?
+  validates :province_id, presence: true, if: :should_validate?
   
   before_validation :normalize_postal_code
   
@@ -20,6 +21,11 @@ class Address < ApplicationRecord
   end
   
   private
+  
+  # Only validate if any address field has data
+  def should_validate?
+    street_address.present? || city.present? || postal_code.present? || province_id.present?
+  end
   
   def normalize_postal_code
     if postal_code.present?

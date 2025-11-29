@@ -108,24 +108,11 @@
   <% end %>
 
   <!-- Products Grid -->
-  <div class="products-grid">
-    <% if @products.any? %>
-      <% @products.each do |product| %>
-        <div class="product-card">
-          <h3><%= link_to product.name, product_path(product) %></h3>
-          <p class="category"><%= product.category.name %></p>
-          <p class="description"><%= truncate(product.description, length: 100) %></p>
-          <p class="price">
-            <% if product.on_sale? %>
-              <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
-              <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
-            <% else %>
-              $<%= number_with_precision(product.price, precision: 2) %>
-            <% end %>
-          </p>
-          <%= link_to 'View Details', product_path(product), class: 'btn' %>
-        </div>
-      <% end %>
+<div class="products-grid">
+  <% if @products.any? %>
+    <% @products.each do |product| %>
+      <%= render 'product_card', product: product %>
+    <% end %>
     <% else %>
       <p class="no-products">
         <% if @search_query.present? %>

@@ -1,14 +1,23 @@
-<div class="product-card">
-  <h3><%= link_to product.name, product_path(product) %></h3>
-  <p class="category"><%= product.category.name %></p>
-  <p class="description"><%= truncate(product.description, length: 100) %></p>
-  <p class="price">
-    <% if product.on_sale? %>
-      <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
-      <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
-    <% else %>
-      $<%= number_with_precision(product.price, precision: 2) %>
+<div class="card h-100 product-card">
+  <div class="card-body">
+    <h3 class="card-title"><%= link_to product.name, product_path(product) %></h3>
+    <p class="category text-muted"><%= product.category.name %></p>
+    <p class="card-text description"><%= truncate(product.description, length: 100) %></p>
+    
+    <% if product.images.attached? %>
+      <div class="product-images mb-3">
+        <%= image_tag product.images.first, class: "product-image img-fluid" %>
+      </div>
     <% end %>
-  </p>
-  <%= link_to 'View Details', product_path(product), class: 'btn' %>
+    
+    <p class="price">
+      <% if product.on_sale? %>
+        <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
+        <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
+      <% else %>
+        $<%= number_with_precision(product.price, precision: 2) %>
+      <% end %>
+    </p>
+    <%= link_to 'View Details', product_path(product), class: 'btn btn-primary' %>
+  </div>
 </div>

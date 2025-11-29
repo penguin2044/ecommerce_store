@@ -5,28 +5,34 @@
   <!-- Search Bar with Category Filter -->
   <div class="search-container">
     <%= form_with url: root_path, method: :get, class: "search-form" do %>
-      <div class="search-row">
-        <%= text_field_tag :search, params[:search], 
-            placeholder: "Search for instruments, brands, or keywords...", 
-            class: "search-input" %>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <%= text_field_tag :search, params[:search], 
+              placeholder: "Search for instruments, brands, or keywords...", 
+              class: "form-control search-input" %>
+        </div>
         
-        <%= select_tag :search_category_id, 
-            options_from_collection_for_select(@categories, :id, :name, params[:search_category_id]), 
-            { prompt: 'All Categories',label: 'serach categories dropdown', class: 'search-category-select' } %>
+        <div class="col-md-4">
+          <%= select_tag :search_category_id, 
+              options_from_collection_for_select(@categories, :id, :name, params[:search_category_id]), 
+              { prompt: 'All Categories', label: 'search categories dropdown', class: 'form-select search-category-select' } %>
+        </div>
         
-        <%= submit_tag "Search", class: "search-btn" %>
+        <div class="col-md-2">
+          <%= submit_tag "Search", class: "btn btn-primary w-100 search-btn" %>
+        </div>
       </div>
       
       <% if params[:search].present? || params[:search_category_id].present? %>
-        <%= link_to "Clear Search", root_path, class: "clear-search-btn" %>
+        <%= link_to "Clear Search", root_path, class: "btn btn-danger btn-sm mt-3 clear-search-btn" %>
       <% end %>
     <% end %>
   </div>
 
   <!-- Search Results Info -->
   <% if @search_query.present? || params[:search_category_id].present? %>
-    <div class="search-results-info">
-      <p>
+    <div class="alert alert-info search-results-info">
+      <p class="mb-0">
         Found <%= pluralize(@products.total_count, 'product') %>
         <% if @search_query.present? %>
           matching "<strong><%= @search_query %></strong>"
@@ -43,22 +49,26 @@
   <% if @recently_updated_products.any? && @category.nil? && @search_query.nil? && params[:search_category_id].nil? %>
     <div class="featured-section">
       <h2 class="section-title">Recently Updated (Last 3 Days)</h2>
-      <div class="featured-grid">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <% @recently_updated_products.each do |product| %>
-          <div class="product-card featured-card">
-            <span class="featured-badge">Updated</span>
-            <h3><%= link_to product.name, product_path(product) %></h3>
-            <p class="category"><%= product.category.name %></p>
-            <p class="description"><%= truncate(product.description, length: 80) %></p>
-            <p class="price">
-              <% if product.on_sale? %>
-                <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
-                <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
-              <% else %>
-                $<%= number_with_precision(product.price, precision: 2) %>
-              <% end %>
-            </p>
-            <%= link_to 'View Details', product_path(product), class: 'btn' %>
+          <div class="col">
+            <div class="card h-100 product-card featured-card">
+              <span class="featured-badge">Updated</span>
+              <div class="card-body">
+                <h3 class="card-title"><%= link_to product.name, product_path(product) %></h3>
+                <p class="category text-muted"><%= product.category.name %></p>
+                <p class="card-text description"><%= truncate(product.description, length: 80) %></p>
+                <p class="price">
+                  <% if product.on_sale? %>
+                    <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
+                    <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
+                  <% else %>
+                    $<%= number_with_precision(product.price, precision: 2) %>
+                  <% end %>
+                </p>
+                <%= link_to 'View Details', product_path(product), class: 'btn btn-primary' %>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>
@@ -69,19 +79,23 @@
   <% if @on_sale_products.any? && @category.nil? && @search_query.nil? && params[:search_category_id].nil? %>
     <div class="sale-section">
       <h2 class="section-title">Hot Deals - On Sale Now!</h2>
-      <div class="sale-grid">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <% @on_sale_products.each do |product| %>
-          <div class="product-card sale-card">
-            <span class="sale-badge">Sale</span>
-            <h3><%= link_to product.name, product_path(product) %></h3>
-            <p class="category"><%= product.category.name %></p>
-            <p class="description"><%= truncate(product.description, length: 80) %></p>
-            <p class="price">
-              <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
-              <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
-              <span class="savings-badge">Save <%= number_to_percentage(((product.price - product.sale_price) / product.price * 100), precision: 0) %></span>
-            </p>
-            <%= link_to 'View Details', product_path(product), class: 'btn' %>
+          <div class="col">
+            <div class="card h-100 product-card sale-card">
+              <span class="sale-badge">Sale</span>
+              <div class="card-body">
+                <h3 class="card-title"><%= link_to product.name, product_path(product) %></h3>
+                <p class="category text-muted"><%= product.category.name %></p>
+                <p class="card-text description"><%= truncate(product.description, length: 80) %></p>
+                <p class="price">
+                  <span class="original-price">$<%= number_with_precision(product.price, precision: 2) %></span>
+                  <span class="sale-price">$<%= number_with_precision(product.sale_price, precision: 2) %></span>
+                  <span class="savings-badge">Save <%= number_to_percentage(((product.price - product.sale_price) / product.price * 100), precision: 0) %></span>
+                </p>
+                <%= link_to 'View Details', product_path(product), class: 'btn btn-primary' %>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>
@@ -89,10 +103,10 @@
   <% end %>
   
   <!-- Category Navigation -->
-  <div class="category-nav">
-    <%= link_to 'All Products', root_path, class: @category.nil? ? 'category-link active' : 'category-link' %>
+  <div class="btn-group category-nav" role="group">
+    <%= link_to 'All Products', root_path, class: "btn #{@category.nil? ? 'btn-primary' : 'btn-outline-primary'} category-link" %>
     <% @categories.each do |category| %>
-      <%= link_to category.name, root_path(category_id: category.id), class: @category == category ? 'category-link active' : 'category-link' %>
+      <%= link_to category.name, root_path(category_id: category.id), class: "btn #{@category == category ? 'btn-primary' : 'btn-outline-primary'} category-link" %>
     <% end %>
   </div>
 
@@ -107,20 +121,24 @@
     <h2 class="section-title">All Products</h2>
   <% end %>
 
-  <!-- Products Grid -->
-<div class="products-grid">
-  <% if @products.any? %>
-    <% @products.each do |product| %>
-      <%= render 'product_card', product: product %>
-    <% end %>
+  <!-- Products Grid with Bootstrap Grid -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% if @products.any? %>
+      <% @products.each do |product| %>
+        <div class="col">
+          <%= render 'product_card', product: product %>
+        </div>
+      <% end %>
     <% else %>
-      <p class="no-products">
-        <% if @search_query.present? %>
-          No products found matching "<%= @search_query %>". Try a different search term.
-        <% else %>
-          No products found in this category.
-        <% end %>
-      </p>
+      <div class="col-12">
+        <div class="alert alert-warning text-center no-products">
+          <% if @search_query.present? %>
+            No products found matching "<%= @search_query %>". Try a different search term.
+          <% else %>
+            No products found in this category.
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
   

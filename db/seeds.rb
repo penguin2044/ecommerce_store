@@ -87,7 +87,7 @@ products_data = [
   { name: 'Fender Player Telecaster', description: 'Classic Tele twang with modern updates and comfortable playability.', price: 749.99, category: guitars, stock_quantity: 7 },
   { name: 'Martin D-28 Acoustic', description: 'Legendary dreadnought with rich bass and clear trebles.', price: 3199.99, category: guitars, stock_quantity: 2, featured: true },
   { name: 'Gretsch G5420T Electromatic', description: 'Hollow body electric with classic rockabilly tone.', price: 599.99, category: guitars, stock_quantity: 5 },
-  
+
   { name: 'Squier Affinity Stratocaster', description: 'Budget-friendly Strat for beginners with great playability.', price: 229.99, category: guitars, stock_quantity: 15 },
   { name: 'Schecter Hellraiser C-1', description: 'Metal machine with EMG pickups and sustainer system.', price: 899.99, category: guitars, stock_quantity: 4 },
   { name: 'Jackson Dinky JS32', description: 'Shred-ready guitar with fast neck and hot humbuckers.', price: 349.99, category: guitars, stock_quantity: 8 },
@@ -183,7 +183,7 @@ products_data = [
   { name: 'Mendini MCT-E Trumpet', description: 'Entry-level trumpet with case.', price: 179.99, category: band_instruments, stock_quantity: 10 },
   { name: 'Glory Professional Flute', description: 'Affordable closed-hole flute.', price: 129.99, category: band_instruments, stock_quantity: 12 },
   { name: 'Eastar EPC-1 Piccolo', description: 'ABS plastic piccolo for students.', price: 89.99, category: band_instruments, stock_quantity: 8 },
-  { name: 'Mendini B Flat Clarinet', description: 'Complete beginner clarinet kit.', price: 139.99, category: band_instruments, stock_quantity: 10 },
+  { name: 'Mendini B Flat Clarinet', description: 'Complete beginner clarinet kit.', price: 139.99, category: band_instruments, stock_quantity: 10 }
 ]
 
 products_data.each do |product_data|

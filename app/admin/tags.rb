@@ -16,7 +16,7 @@ ActiveAdmin.register Tag do
   filter :created_at
 
   form do |f|
-    f.inputs 'Tag Details' do
+    f.inputs "Tag Details" do
       f.input :name
     end
     f.actions
@@ -31,7 +31,7 @@ ActiveAdmin.register Tag do
         tag.products.count
       end
     end
-    
+
     panel "Products with this Tag" do
       table_for tag.products.order(:name) do
         column :name do |product|

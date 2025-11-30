@@ -2,9 +2,9 @@ ActiveAdmin.register Order do
   # Remove problematic filters
   remove_filter :stripe_payment_intent_id
   remove_filter :order_items
-  
+
   permit_params :status, :user_id
-  
+
   index do
     selectable_column
     id_column
@@ -38,7 +38,7 @@ ActiveAdmin.register Order do
     column :created_at
     actions
   end
-  
+
   show do
     attributes_table do
       row :id
@@ -73,7 +73,7 @@ ActiveAdmin.register Order do
       row :created_at
       row :updated_at
     end
-    
+
     panel "Order Items" do
       table_for order.order_items do
         column :product

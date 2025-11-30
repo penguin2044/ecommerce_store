@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   permit_params :email, :first_name, :last_name, :admin,
-                address_attributes: [:id, :street_address, :city, :province_id, :postal_code]
+                address_attributes: [ :id, :street_address, :city, :province_id, :postal_code ]
 
   # Filters
   filter :email
@@ -9,7 +9,7 @@ ActiveAdmin.register User do
   filter :created_at
   filter :updated_at
 
-  # Index page - list of users
+# Index page - list of users
 index do
   selectable_column
   id_column
@@ -38,7 +38,7 @@ end
       row :created_at
       row :updated_at
     end
-    
+
     panel "Shipping Address" do
       if user.address
         attributes_table_for user.address do
@@ -53,7 +53,7 @@ end
         para "No address on file"
       end
     end
-    
+
     panel "Orders" do
       table_for user.orders.order(created_at: :desc) do
         column "Order ID" do |order|
@@ -76,7 +76,7 @@ end
       f.input :last_name
       f.input :admin, as: :boolean, label: "Administrator?"
     end
-    
+
     f.inputs "Shipping Address" do
       f.has_many :address, allow_destroy: true, heading: false do |address_form|
         address_form.input :street_address
@@ -85,7 +85,7 @@ end
         address_form.input :postal_code, placeholder: "A1A 1A1"
       end
     end
-    
+
     f.actions
   end
 end

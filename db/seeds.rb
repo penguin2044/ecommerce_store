@@ -9,6 +9,8 @@
 #   end
 # Clear existing data
 puts "Clearing existing data..."
+ProductTag.destroy_all
+Tag.destroy_all
 OrderItem.destroy_all
 Order.destroy_all
 Product.destroy_all
@@ -63,6 +65,38 @@ end
 
 puts "Created #{Category.count} categories"
 
+puts "Creating tags..."
+
+# Music product tags
+tags_data = [
+  "Beginner Friendly",
+  "Professional Grade",
+  "Limited Edition",
+  "Best Seller",
+  "New Arrival",
+  "Vintage",
+  "Acoustic",
+  "Electric",
+  "Wireless",
+  "Portable",
+  "Studio Quality",
+  "Live Performance",
+  "Recording",
+  "Practice",
+  "Travel Size",
+  "High-End",
+  "Budget Option",
+  "Made in USA",
+  "Handcrafted",
+  "Modern Design"
+]
+
+tags = tags_data.map do |tag_name|
+  Tag.create!(name: tag_name)
+end
+
+puts "Created #{tags.count} tags"
+
 puts "Creating products..."
 
 # Get category references
@@ -76,7 +110,7 @@ accessories = Category.find_by(name: 'Accessories')
 sheet_music = Category.find_by(name: 'Sheet Music & Books')
 
 products_data = [
-  # GUITARS (30 products)
+  # GUITARS (40 products)
   { name: 'Fender Stratocaster Electric Guitar', description: 'Classic American-made electric guitar with three single-coil pickups and versatile tone options.', price: 1299.99, category: guitars, stock_quantity: 5, featured: true },
   { name: 'Gibson Les Paul Standard', description: 'Iconic electric guitar with dual humbuckers and mahogany body for rich, warm tones.', price: 2499.99, category: guitars, stock_quantity: 3, featured: true },
   { name: 'Yamaha FG800 Acoustic Guitar', description: 'Affordable solid-top acoustic guitar perfect for beginners and intermediate players.', price: 249.99, category: guitars, stock_quantity: 12 },
@@ -87,7 +121,6 @@ products_data = [
   { name: 'Fender Player Telecaster', description: 'Classic Tele twang with modern updates and comfortable playability.', price: 749.99, category: guitars, stock_quantity: 7 },
   { name: 'Martin D-28 Acoustic', description: 'Legendary dreadnought with rich bass and clear trebles.', price: 3199.99, category: guitars, stock_quantity: 2, featured: true },
   { name: 'Gretsch G5420T Electromatic', description: 'Hollow body electric with classic rockabilly tone.', price: 599.99, category: guitars, stock_quantity: 5 },
-
   { name: 'Squier Affinity Stratocaster', description: 'Budget-friendly Strat for beginners with great playability.', price: 229.99, category: guitars, stock_quantity: 15 },
   { name: 'Schecter Hellraiser C-1', description: 'Metal machine with EMG pickups and sustainer system.', price: 899.99, category: guitars, stock_quantity: 4 },
   { name: 'Jackson Dinky JS32', description: 'Shred-ready guitar with fast neck and hot humbuckers.', price: 349.99, category: guitars, stock_quantity: 8 },
@@ -108,17 +141,17 @@ products_data = [
   { name: 'Squier Classic Vibe 60s Jazzmaster', description: 'Vintage-style offset with modern playability.', price: 449.99, category: guitars, stock_quantity: 5 },
   { name: 'Danelectro 56 Single Cutaway', description: 'Retro guitar with unique lipstick pickups.', price: 499.99, category: guitars, stock_quantity: 4 },
   { name: 'Hofner Ignition Beatles Bass', description: 'Classic violin bass made famous by Paul McCartney.', price: 499.99, category: guitars, stock_quantity: 3 },
-
   { name: 'Fender Stratocaster', description: 'Classic American-made electric guitar with three single-coil pickups and versatile tone options.', price: 1299.99, category: guitars, stock_quantity: 5, featured: true },
   { name: 'Gibson Les Paul', description: 'Iconic electric guitar with dual humbuckers and mahogany body for rich, warm tones.', price: 2499.99, category: guitars, stock_quantity: 7, featured: true },
   { name: 'Yamaha Acoustic Guitar', description: 'Affordable solid-top acoustic guitar perfect for beginners and intermediate players.', price: 249.99, category: guitars, stock_quantity: 6 },
-  { name: 'Ibanez  Bass Guitar', description: '4-string electric bass with active electronics and lightweight body.', price: 449.99, category: guitars, stock_quantity: 5 },
+  { name: 'Ibanez Bass Guitar', description: '4-string electric bass with active electronics and lightweight body.', price: 449.99, category: guitars, stock_quantity: 5 },
   { name: 'Taylor 2142ce Acoustic-Electric', description: 'Premium acoustic-electric with solid Sitka spruce top and built-in electronics.', price: 999.99, category: guitars, stock_quantity: 4, on_sale: true, sale_price: 899.99 },
   { name: 'PRS SE Custom 25', description: 'Versatile guitar with coil-split humbuckers and beautiful figured maple top.', price: 799.99, category: guitars, stock_quantity: 4 },
   { name: 'Epiphone SJ Standard', description: 'Affordable take on the classic SG design with dual humbuckers.', price: 3379.99, category: guitars, stock_quantity: 10, on_sale: true, sale_price: 329.99 },
   { name: 'Fender Player Telecaster', description: 'Classic Tele twang with modern updates and comfortable playability.', price: 749.99, category: guitars, stock_quantity: 2 },
   { name: 'Martin D-29 Acoustic', description: 'Legendary dreadnought with rich bass and clear trebles.', price: 199.99, category: guitars, stock_quantity: 6, featured: true },
   { name: 'Gretsch G5422T Electromatic', description: 'Hollow body electric with classic rockabilly tone.', price: 5399.99, category: guitars, stock_quantity: 9 },
+
   # DRUMS & PERCUSSION (25 products)
   { name: 'Pearl Export 5-Piece Drum Kit', description: 'Complete drum kit with hardware and cymbals, perfect for rock and pop.', price: 899.99, category: drums, stock_quantity: 3, featured: true },
   { name: 'Zildjian A Custom Cymbal Set', description: 'Professional cymbal pack including hi-hats, crash, and ride cymbals.', price: 799.99, category: drums, stock_quantity: 6 },
@@ -186,13 +219,16 @@ products_data = [
   { name: 'Mendini B Flat Clarinet', description: 'Complete beginner clarinet kit.', price: 139.99, category: band_instruments, stock_quantity: 10 }
 ]
 
+# Create products and assign random tags
 products_data.each do |product_data|
-  Product.create!(product_data)
+  product = Product.create!(product_data)
+  
+  # Assign 1-3 random tags to each product
+  random_tags = tags.sample(rand(1..3))
+  product.tags << random_tags
 end
 
-puts "Created #{Product.count} products"
-
-puts "Creating admin user..."
+puts "Created #{Product.count} products with tags"
 
 puts "Creating admin user..."
 
@@ -255,13 +291,14 @@ puts "=" * 50
 puts "Provinces: #{Province.count}"
 puts "Categories: #{Category.count}"
 puts "Products: #{Product.count}"
+puts "Tags: #{Tag.count}"
 puts "Users: #{User.count}"
 puts "Pages: #{Page.count}"
 puts "\nAdmin login: admin@intothemusic.com"
 puts "Customer login: customer@example.com"
 puts "=" * 50
 
-A# Create AdminUser for Active Admin login
+# Create AdminUser for Active Admin login
 AdminUser.find_or_create_by!(email: 'admin@intothemusic.com') do |admin_user|
   admin_user.password = 'Password123!'
   admin_user.password_confirmation = 'Password123!'

@@ -338,7 +338,7 @@ h1 {
   }
 
   .category {
-    color: $text-muted;
+    color: $text-muted !important;
     font-size: 14px;
     margin: $padding-small 0;
     font-style: italic;
